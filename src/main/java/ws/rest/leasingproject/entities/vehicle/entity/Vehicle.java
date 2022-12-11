@@ -1,5 +1,8 @@
 package ws.rest.leasingproject.entities.vehicle.entity;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Vehicle {
     private String immatriculation;
     private VehicleType type;
@@ -9,7 +12,10 @@ public class Vehicle {
     private GearBox gearBox;
     private String description;
 
-    public Vehicle(String immatriculation, VehicleType type, String brand, String model, MotorType motorType, GearBox gearBox, String description) {
+    public Vehicle(String immatriculation, VehicleType type, String brand, String model, MotorType motorType, GearBox gearBox, String description) throws RegistrationException {
+        if(!isRegistrationFormatOK(immatriculation)){
+            throw new RegistrationException();
+        }
         this.immatriculation = immatriculation;
         this.type = type;
         this.brand = brand;
@@ -21,11 +27,24 @@ public class Vehicle {
 
     public Vehicle(){};
 
+    public static Vehicle defaultVehicle(){
+        try{
+            return new Vehicle("AA-001-AA", VehicleType.CAR,
+                    "BMW", "i8", MotorType.PETROL,
+                    GearBox.MANUAL, "? description ?");
+        } catch (RegistrationException e) {
+            return null;
+        }
+    }
+
     public String getImmatriculation() {
         return immatriculation;
     }
 
-    public void setImmatriculation(String immatriculation) {
+    public void setImmatriculation(String immatriculation) throws RegistrationException {
+        if(!isRegistrationFormatOK(immatriculation)){
+            throw new RegistrationException();
+        }
         this.immatriculation = immatriculation;
     }
 
@@ -76,4 +95,13 @@ public class Vehicle {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public static boolean isRegistrationFormatOK(String toTest){
+        final String regex =  "^[A-Z]{2}-[0-9]{3}-[A-Z]{2}$";
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        final Matcher matcher = pattern.matcher(toTest);
+
+        return matcher.find();
+    }
+
 }

@@ -88,9 +88,6 @@ import java.util.List;
 
     public static String toXML(Vehicle vehicle){
 
-        System.out.println(vehicle.getImmatriculation());
-        System.out.println(vehicle.getType());
-
         Document document = DocumentHelper.createDocument();
         Element vehicleAsXML = document.addElement("vehicle");
 

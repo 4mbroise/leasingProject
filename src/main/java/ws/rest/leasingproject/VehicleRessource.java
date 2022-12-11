@@ -12,12 +12,11 @@ import ws.rest.leasingproject.entities.vehicle.entity.VehicleType;
 import ws.rest.leasingproject.entities.vehicle.entity.parsers.VehicleJSONParser;
 import ws.rest.leasingproject.entities.vehicle.entity.parsers.VehicleXMLParser;
 
-@Path("/car")
-public class HelloResource {
+@Path("/vehicle")
+public class VehicleRessource {
 
-    private Vehicle car = new Vehicle("immat", VehicleType.CAR,
-                                    "BMW", "i8", MotorType.PETROL,
-                                    GearBox.MANUAL, "? description ?");
+
+    private Vehicle car = Vehicle.defaultVehicle();
 
 
     @GET
