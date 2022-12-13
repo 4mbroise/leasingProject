@@ -6,8 +6,7 @@ import ws.rest.leasingproject.entities.vehicle.entity.MotorType;
 import ws.rest.leasingproject.entities.vehicle.entity.Vehicle;
 import ws.rest.leasingproject.entities.vehicle.entity.VehicleType;
 
-import java.util.List;
- public class VehicleXMLParser {
+public class VehicleXMLParser {
     public static Vehicle fromXML(String xmlAsString) throws DocumentException {
 
         Vehicle vehicle = new Vehicle();
@@ -15,7 +14,7 @@ import java.util.List;
 
         try{
             String registration = rootElement.selectNodes("registration").get(0).getText();
-            vehicle.setImmatriculation(registration);
+            vehicle.setRegistration(registration);
         } catch (Exception e){
         }
         try{
@@ -92,31 +91,31 @@ import java.util.List;
         Element vehicleAsXML = document.addElement("vehicle");
 
         //--------------------------------------------------------------------------------REGISTRATION
-        if(vehicle.getImmatriculation() != null){
-            vehicleAsXML.addElement("registration").addText(vehicle.getImmatriculation());
+        if(vehicle.getRegistration() != null){
+            vehicleAsXML.addElement("registration").addText(vehicle.getRegistration());
         }
         //--------------------------------------------------------------------------------VEHICLE TYPE
-        if(vehicle.getImmatriculation() != null){
+        if(vehicle.getRegistration() != null){
             vehicleAsXML.addElement("type").addText(vehicle.getType().type);
         }
         //--------------------------------------------------------------------------------BRAND
-        if(vehicle.getImmatriculation() != null){
+        if(vehicle.getRegistration() != null){
             vehicleAsXML.addElement("brand").addText(vehicle.getBrand());
         }
         //--------------------------------------------------------------------------------MODEL
-        if(vehicle.getImmatriculation() != null){
+        if(vehicle.getRegistration() != null){
             vehicleAsXML.addElement("model").addText(vehicle.getModel());
         }
         //--------------------------------------------------------------------------------MOTOT TYPE
-        if(vehicle.getImmatriculation() != null){
+        if(vehicle.getRegistration() != null){
             vehicleAsXML.addElement("motorType").addText(vehicle.getMotorType().type);
         }
         //--------------------------------------------------------------------------------GEAR BOX
-        if(vehicle.getImmatriculation() != null){
+        if(vehicle.getRegistration() != null){
             vehicleAsXML.addElement("gearBox").addText(vehicle.getGearBox().gearBox);
         }
         //--------------------------------------------------------------------------------DESCRIPTION
-        if(vehicle.getImmatriculation() != null){
+        if(vehicle.getRegistration() != null){
             vehicleAsXML.addElement("description").addText(vehicle.getDescription());
         }
         return vehicleAsXML.asXML();

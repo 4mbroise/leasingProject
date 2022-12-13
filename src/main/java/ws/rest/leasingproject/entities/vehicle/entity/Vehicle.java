@@ -1,10 +1,13 @@
 package ws.rest.leasingproject.entities.vehicle.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Vehicle {
-    private String immatriculation;
+    private String registration;
     private VehicleType type;
     private String brand;
     private String model;
@@ -12,11 +15,11 @@ public class Vehicle {
     private GearBox gearBox;
     private String description;
 
-    public Vehicle(String immatriculation, VehicleType type, String brand, String model, MotorType motorType, GearBox gearBox, String description) throws RegistrationException {
-        if(!isRegistrationFormatOK(immatriculation)){
+    public Vehicle(String registration, VehicleType type, String brand, String model, MotorType motorType, GearBox gearBox, String description) throws RegistrationException {
+        if(!isRegistrationFormatOK(registration)){
             throw new RegistrationException();
         }
-        this.immatriculation = immatriculation;
+        this.registration = registration;
         this.type = type;
         this.brand = brand;
         this.model = model;
@@ -26,6 +29,26 @@ public class Vehicle {
     }
 
     public Vehicle(){};
+
+    public static Vehicle fromXML(String xml) throws Exception {
+        XmlMapper xmlMapper = new XmlMapper();
+        Vehicle vehicle = null;
+        vehicle = xmlMapper.readValue(xml, Vehicle.class);
+
+        Vehicle.checkIfValidVehicule(vehicle);
+
+        return vehicle;
+    }
+
+    public static Vehicle fromJSON(String json) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Vehicle vehicle = null;
+        vehicle = objectMapper.readValue(json, Vehicle.class);
+
+        Vehicle.checkIfValidVehicule(vehicle);
+
+        return vehicle;
+    }
 
     public static Vehicle defaultVehicle(){
         try{
@@ -37,15 +60,15 @@ public class Vehicle {
         }
     }
 
-    public String getImmatriculation() {
-        return immatriculation;
+    public String getRegistration() {
+        return registration;
     }
 
-    public void setImmatriculation(String immatriculation) throws RegistrationException {
-        if(!isRegistrationFormatOK(immatriculation)){
+    public void setRegistration(String registration) throws RegistrationException {
+        if(!isRegistrationFormatOK(registration)){
             throw new RegistrationException();
         }
-        this.immatriculation = immatriculation;
+        this.registration = registration;
     }
 
     public VehicleType getType() {
@@ -94,6 +117,27 @@ public class Vehicle {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String toXML() throws JsonProcessingException {
+        XmlMapper xmlMapper = new XmlMapper();
+        return xmlMapper.writeValueAsString(this);
+    }
+
+    public String toJSON() throws JsonProcessingException {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        return jsonMapper.writeValueAsString(this);
+    }
+
+    public static void checkIfValidVehicule(Vehicle vehicle) throws Exception {
+        if (vehicle.registration == null) throw new Exception("name registration");
+        if (vehicle.type == null) throw new Exception("name type");
+        if (vehicle.brand == null) throw new Exception("name brand");
+        if (vehicle.model == null) throw new Exception("name model");
+        if (vehicle.motorType == null) throw new Exception("name motorType");
+        if (vehicle.gearBox == null) throw new Exception("name gearBox");
+        if (vehicle.description == null) throw new Exception("name description");
+        if (!Vehicle.isRegistrationFormatOK(vehicle.registration)) throw new Exception("wrong format : registration");
     }
 
     public static boolean isRegistrationFormatOK(String toTest){

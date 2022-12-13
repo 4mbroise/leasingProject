@@ -1,31 +1,22 @@
 package ws.rest.leasingproject.entities.employee.entity;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.fasterxml.jackson.dataformat.xml.deser.FromXmlParser;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 
-import java.io.StringReader;
-import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@JacksonXmlRootElement(localName = "employee")
 public class Employee {
+    @JsonProperty("memberID")
     private int memberId;
     private String name;
     private String surname;
@@ -35,16 +26,20 @@ public class Employee {
 
     public static Employee fromXML(String xml) throws Exception {
         XmlMapper xmlMapper = new XmlMapper();
-        Employee employee = null;
+        Employee employee;
         employee = xmlMapper.readValue(xml, Employee.class);
 
-        if (employee.name == null) throw new Exception("name missing");
-        if (employee.surname == null) throw new Exception("name missing");
-        if (employee.socialSecurityId == null) throw new Exception("name missing");
-        if (employee.driverLicenseId == null) throw new Exception("name missing");
-        if (employee.adress == null) throw new Exception("name missing");
-        if (!Employee.isSocialSecurityIdValid(employee.socialSecurityId)) throw new Exception("wrong format : socialSecurityId");
-        if (!Employee.isDriverLicenseIdValid(employee.driverLicenseId)) throw new Exception("wrong format : driverLicenseId");
+        checkIfValidEmployee(employee);
+
+        return employee;
+    }
+
+    public static Employee fromJSON(String json) throws Exception {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        Employee employee;
+        employee = jsonMapper.readValue(json, Employee.class);
+
+        checkIfValidEmployee(employee);
 
         return employee;
     }
@@ -123,6 +118,22 @@ public class Employee {
     public String toXML() throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
         return xmlMapper.writeValueAsString(this);
+    }
+
+    public String toJSON() throws JsonProcessingException {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        return jsonMapper.writeValueAsString(this);
+    }
+
+    public static void checkIfValidEmployee(Employee employee) throws Exception {
+        if (employee.name == null) throw new Exception("name missing");
+        if (employee.surname == null) throw new Exception("surname missing");
+        if (employee.socialSecurityId == null) throw new Exception("socialSecurityId missing");
+        if (employee.driverLicenseId == null) throw new Exception("driverLicenseId missing");
+        if (employee.adress == null) throw new Exception("adress missing");
+        if (!Employee.isSocialSecurityIdValid(employee.socialSecurityId)) throw new Exception("wrong format : socialSecurityId");
+        if (!Employee.isDriverLicenseIdValid(employee.driverLicenseId)) throw new Exception("wrong format : driverLicenseId");
+
     }
 
     public static boolean isDriverLicenseIdValid(String toTest){
