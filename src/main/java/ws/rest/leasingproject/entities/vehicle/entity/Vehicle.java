@@ -3,6 +3,8 @@ package ws.rest.leasingproject.entities.vehicle.entity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +34,7 @@ public class Vehicle {
 
     public static Vehicle fromXML(String xml) throws Exception {
         XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.registerModule(new JakartaXmlBindAnnotationModule());
         Vehicle vehicle = null;
         vehicle = xmlMapper.readValue(xml, Vehicle.class);
 
@@ -121,6 +124,7 @@ public class Vehicle {
 
     public String toXML() throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.registerModule(new JakartaXmlBindAnnotationModule());
         return xmlMapper.writeValueAsString(this);
     }
 

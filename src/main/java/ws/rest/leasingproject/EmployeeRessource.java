@@ -17,8 +17,6 @@ import ws.rest.leasingproject.entities.vehicle.entity.GearBox;
 import ws.rest.leasingproject.entities.vehicle.entity.MotorType;
 import ws.rest.leasingproject.entities.vehicle.entity.Vehicle;
 import ws.rest.leasingproject.entities.vehicle.entity.VehicleType;
-import ws.rest.leasingproject.entities.vehicle.entity.parsers.VehicleJSONParser;
-import ws.rest.leasingproject.entities.vehicle.entity.parsers.VehicleXMLParser;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;

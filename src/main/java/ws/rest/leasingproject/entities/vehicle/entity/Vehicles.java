@@ -1,43 +1,33 @@
-package ws.rest.leasingproject.entities.employee.entity;
+package ws.rest.leasingproject.entities.vehicle.entity;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-@JacksonXmlRootElement(localName = "employees")
+@JacksonXmlRootElement(localName = "vehicles")
 @JsonAutoDetect
-public class Employees {
-
-
-
+public class Vehicles {
     @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "employee")
+    @JacksonXmlProperty(localName = "vehicle")
     @JsonProperty
     @JsonUnwrapped
-    private Employee[] employees;
+    private Vehicle[] vehicles;
 
-    public Employees(List employees) {
-        this.employees = new Employee[employees.size()];
-        employees.toArray(this.employees);
+    public Vehicles(List<Vehicle> vehicules){
+        this.vehicles = new Vehicle[vehicules.size()];
+        vehicules.toArray(this.vehicles);
     }
 
     public String toXML() throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
-
         return xmlMapper.writeValueAsString(this);
     }
 
@@ -45,5 +35,4 @@ public class Employees {
         ObjectMapper jsonMapper = new ObjectMapper();
         return jsonMapper.writeValueAsString(this);
     }
-
 }

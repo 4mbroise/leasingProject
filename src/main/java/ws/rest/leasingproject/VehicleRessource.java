@@ -1,20 +1,14 @@
 package ws.rest.leasingproject;
 
-import jakarta.inject.Inject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.dom4j.DocumentException;
-import org.glassfish.jersey.client.internal.ClientResponseProcessingException;
 import ws.rest.leasingproject.entities.vehicle.dao.IVehicleDAO;
 import ws.rest.leasingproject.entities.vehicle.dao.MySQLVehicleDAO;
-import ws.rest.leasingproject.entities.vehicle.entity.GearBox;
-import ws.rest.leasingproject.entities.vehicle.entity.MotorType;
 import ws.rest.leasingproject.entities.vehicle.entity.Vehicle;
-import ws.rest.leasingproject.entities.vehicle.entity.VehicleType;
-import ws.rest.leasingproject.entities.vehicle.entity.parsers.VehicleJSONParser;
-import ws.rest.leasingproject.entities.vehicle.entity.parsers.VehicleXMLParser;
 
 import java.sql.SQLException;
 
@@ -41,25 +35,48 @@ public class VehicleRessource {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public String carXML() {
-        return VehicleXMLParser.toXML(car);
+        try {
+            return car.toXML();
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String carJSON() {
-        //return "JSON";
-        return VehicleJSONParser.toJSON(car);
+        try {
+            return car.toJSON();
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public String createCarXML(String carAsXMLString) {
+    public String createCarXML(String vehicleAsXMLString) {
         try{
-            String xml = VehicleXMLParser.toXML(VehicleXMLParser.fromXML(carAsXMLString));
+            String xml = Vehicle.fromXML(vehicleAsXMLString).toXML();
             return xml;
         } catch (DocumentException e){
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String createCarJSON(String vehicleAsJSONString) {
+        try{
+            String xml = Vehicle.fromJSON(vehicleAsJSONString).toJSON();
+            return xml;
+        } catch (DocumentException e){
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
