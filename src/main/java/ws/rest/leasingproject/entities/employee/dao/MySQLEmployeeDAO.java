@@ -86,7 +86,7 @@ public class MySQLEmployeeDAO implements IEmployeeDAO{
     public void updateEmployeeByMemberId(int memberId, Employee employee) throws SQLException, ClassNotFoundException {
         Connection connection = initConnection();
 
-        if(employee.getAdress() != null){
+        if(employee.getName() != null){
             String update = "UPDATE leasing.employee SET name=? WHERE memberId=?;";
             PreparedStatement statement = connection.prepareStatement(update);
             statement.setString(1, employee.getName());
@@ -94,7 +94,7 @@ public class MySQLEmployeeDAO implements IEmployeeDAO{
             statement.execute();
         }
 
-        if(employee.getAdress() != null){
+        if(employee.getSurname() != null){
             String update = "UPDATE leasing.employee SET surname=? WHERE memberId=?;";
             PreparedStatement statement = connection.prepareStatement(update);
             statement.setString(1, employee.getSurname());
@@ -102,7 +102,7 @@ public class MySQLEmployeeDAO implements IEmployeeDAO{
             statement.execute();
         }
 
-        if(employee.getAdress() != null){
+        if(employee.getSocialSecurityId() != null){
             String update = "UPDATE leasing.employee SET socialSecurityId=? WHERE memberId=?;";
             PreparedStatement statement = connection.prepareStatement(update);
             statement.setString(1, employee.getSocialSecurityId());
@@ -110,7 +110,7 @@ public class MySQLEmployeeDAO implements IEmployeeDAO{
             statement.execute();
         }
 
-        if(employee.getAdress() != null){
+        if(employee.getDriverLicenseId() != null){
             String update = "UPDATE leasing.employee SET driverLicenseId=? WHERE memberId=?;";
             PreparedStatement statement = connection.prepareStatement(update);
             statement.setString(1, employee.getDriverLicenseId());

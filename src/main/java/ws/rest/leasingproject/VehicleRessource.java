@@ -6,11 +6,17 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.dom4j.DocumentException;
+import ws.rest.leasingproject.entities.employee.entity.Employee;
 import ws.rest.leasingproject.entities.vehicle.dao.IVehicleDAO;
 import ws.rest.leasingproject.entities.vehicle.dao.MySQLVehicleDAO;
+import ws.rest.leasingproject.entities.vehicle.entity.MotorType;
+import ws.rest.leasingproject.entities.vehicle.entity.RegistrationException;
 import ws.rest.leasingproject.entities.vehicle.entity.Vehicle;
+import ws.rest.leasingproject.entities.vehicle.entity.VehicleType;
 
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 @Path("/vehicle")
@@ -30,7 +36,6 @@ public class VehicleRessource {
             e.printStackTrace();
         }
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
@@ -79,4 +84,5 @@ public class VehicleRessource {
             throw new RuntimeException(e);
         }
     }
+
 }

@@ -7,8 +7,9 @@ import java.util.List;
 
 public interface IVehicleDAO {
     List<Vehicle> findAll() throws Exception;
-    Vehicle findByVehicleId(int VehicleId) throws Exception;
+
+    Vehicle findByRegistration(String registration) throws Exception;
     void createVehicle(Vehicle vehicle) throws Exception;
     void updateRentByVehicleId(int VehicleId) throws Exception;
-    void removeRentByVehicleId(int VehicleId) throws Exception;
+    void removeRentByRegistration(String registration, Vehicle vehicle) throws Exception;
 }
