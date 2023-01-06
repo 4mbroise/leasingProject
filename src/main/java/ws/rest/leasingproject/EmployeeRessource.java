@@ -77,6 +77,7 @@ public class EmployeeRessource {
         Employee employee = null;
         try {
             employee = Employee.fromXML(xmlAsEmployee);
+            Employee.checkIfValidEmployee(employee);
             int memberId = employeeDAO.createEmployee(employee);
             return employeeDAO.findByMemberId(memberId).toXML();
         } catch (Exception e) {
@@ -90,12 +91,57 @@ public class EmployeeRessource {
         Employee employee = null;
         try {
             employee = Employee.fromJSON(jsonAsEmployee);
+            Employee.checkIfValidEmployee(employee);
             int memberId = employeeDAO.createEmployee(employee);
             return employeeDAO.findByMemberId(memberId).toJSON();
         } catch (Exception e) {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
         }
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("/{id}")
+    public String updateEmployeeXML(@PathParam("id") int id, String xmlAsEmployee) {
+        Employee employee = null;
+        try {
+            employee = Employee.fromXML(xmlAsEmployee);
+            employeeDAO.updateEmployeeByMemberId(id, employee);
+            return employeeDAO.findByMemberId(id).toXML();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public String updateEmployeeJSON(@PathParam("id") int id, String xmlAsEmployee) {
+        Employee employee = null;
+        try {
+            employee = Employee.fromJSON(xmlAsEmployee);
+            employeeDAO.updateEmployeeByMemberId(id, employee);
+            return employeeDAO.findByMemberId(id).toJSON();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public String deleteEmployeeJSON(@PathParam("id") int id) {
+        try {
+            employeeDAO.removeEmployeeByMemberId(id);
+            return "{}";
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
 
 
 

@@ -59,6 +59,7 @@ public class MySQLEmployeeDAO implements IEmployeeDAO{
 
     @Override
     public int createEmployee(Employee employee) throws Exception {
+        Employee.checkIfValidEmployee(employee);
         Connection connection = initConnection();
         String queryAllEmployee = "INSERT INTO leasing.employee (name, surname, socialSecurityId, driverLicenseId, adress) VALUES (?,?,?,?,?);";
         PreparedStatement prepareStatement = connection.prepareStatement(queryAllEmployee);
@@ -130,9 +131,10 @@ public class MySQLEmployeeDAO implements IEmployeeDAO{
     @Override
     public void removeEmployeeByMemberId(int memberId) throws SQLException, ClassNotFoundException {
         Connection connection = initConnection();
-        String delete = "DELETE FROM leasing.employee WHERE memberId=10;";
-        Statement statement = connection.createStatement();
-        statement.execute(delete);
+        String delete = "DELETE FROM leasing.employee WHERE memberId=?;";
+        PreparedStatement preparedStatement = connection.prepareStatement(delete);
+        preparedStatement.setInt(1, memberId);
+        preparedStatement.execute(delete);
     }
 
     private Connection initConnection() throws ClassNotFoundException, SQLException {

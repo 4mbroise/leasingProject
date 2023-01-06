@@ -9,10 +9,7 @@ import org.dom4j.DocumentException;
 import ws.rest.leasingproject.entities.employee.entity.Employee;
 import ws.rest.leasingproject.entities.vehicle.dao.IVehicleDAO;
 import ws.rest.leasingproject.entities.vehicle.dao.MySQLVehicleDAO;
-import ws.rest.leasingproject.entities.vehicle.entity.MotorType;
-import ws.rest.leasingproject.entities.vehicle.entity.RegistrationException;
-import ws.rest.leasingproject.entities.vehicle.entity.Vehicle;
-import ws.rest.leasingproject.entities.vehicle.entity.VehicleType;
+import ws.rest.leasingproject.entities.vehicle.entity.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -41,8 +38,8 @@ public class VehicleRessource {
     @Produces(MediaType.APPLICATION_XML)
     public String carXML() {
         try {
-            return car.toXML();
-        } catch (JsonProcessingException e) {
+            return new Vehicles(vehicleDAO.findAll()).toXML();
+        } catch (Exception e) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
     }
@@ -51,11 +48,110 @@ public class VehicleRessource {
     @Produces(MediaType.APPLICATION_JSON)
     public String carJSON() {
         try {
-            return car.toJSON();
-        } catch (JsonProcessingException e) {
+            return new Vehicles(vehicleDAO.findAll()).toJSON();
+        } catch (Exception e) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("/{registration}")
+    public String vehicleXML(@PathParam("registration") String registration) {
+        try {
+            return vehicleDAO.findByRegistration(registration).toXML();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("/{registration}")
+    public String vehicleJSON(@PathParam("registration") String registration) {
+        try {
+            return vehicleDAO.findByRegistration(registration).toJSON();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    public String createEmployeeXML(String xmlAsVehicle) {
+        Vehicle employee = null;
+        try {
+            employee = Vehicle.fromXML(xmlAsVehicle);
+            return vehicleDAO.findByRegistration(employee.getRegistration()).toXML();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String createEmployeeJSON(String jsonAsVehicle) {
+        Vehicle employee = null;
+        try {
+            employee = Vehicle.fromJSON(jsonAsVehicle);
+            return vehicleDAO.findByRegistration(employee.getRegistration()).toJSON();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("/{registration}")
+    public String updateEmployeeXML(@PathParam("registration") String registration, String xmlAsVehicule) {
+        Vehicle vehicule = null;
+        try {
+            vehicule = Vehicle.fromXML(xmlAsVehicule);
+            vehicleDAO.updateRentByVehicleId(registration, vehicule);
+            return vehicleDAO.findByRegistration(registration).toXML();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{registration}")
+    public String updateEmployeeJSON(@PathParam("registration") String registration, String jsonAsVehicule) {
+        Vehicle vehicule = null;
+        try {
+            vehicule = Vehicle.fromXML(jsonAsVehicule);
+            vehicleDAO.updateRentByVehicleId(registration, vehicule);
+            return vehicleDAO.findByRegistration(registration).toXML();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public String deleteEmployeeJSON(@PathParam("id") String registration) {
+        try {
+            vehicleDAO.removeVehicleByRegistration(registration);
+            return "{}";
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)

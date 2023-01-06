@@ -10,6 +10,10 @@ public interface IVehicleDAO {
 
     Vehicle findByRegistration(String registration) throws Exception;
     void createVehicle(Vehicle vehicle) throws Exception;
-    void updateRentByVehicleId(int VehicleId) throws Exception;
-    void removeRentByRegistration(String registration, Vehicle vehicle) throws Exception;
+    void updateRentByVehicleId(String registration, Vehicle vehicle) throws Exception;
+
+    void updateByRegistration(String registration, Vehicle vehicle) throws Exception;
+
+    void removeVehicleByRegistration(String registration) throws Exception;
+
 }
