@@ -16,7 +16,6 @@ public class MySQLVehicleDAO implements IVehicleDAO{
     private Connection dbConnection;
 
     public MySQLVehicleDAO() throws ClassNotFoundException, SQLException {
-        System.out.println("Faugier");
         Class.forName("com.mysql.cj.jdbc.Driver");
         dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/leasing", "root", "");
 
@@ -25,6 +24,8 @@ public class MySQLVehicleDAO implements IVehicleDAO{
         try(Statement statement = dbConnection.createStatement()){
             statement.execute(createVehicleTable);
         }
+
+        dbConnection.close();
     }
 
 
@@ -101,7 +102,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
     @Override
     public Vehicle findByRegistration(String registration) throws Exception {
         Connection connection = initConnection();
-        String queryCehicle = "SELECT * from leasing.employee WHERE registration = ?;";
+        String queryCehicle = "SELECT * from leasing.vehicle WHERE registration = ?;";
         PreparedStatement preparedStatement = connection.prepareStatement(queryCehicle);
         preparedStatement.setString(1, registration);
 
@@ -235,7 +236,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
 
         // Update Type
         if(vehicle.getType() != null){
-            String update = "UPDATE leasing.employee SET type=? WHERE registraton=?;";
+            String update = "UPDATE leasing.vehicle SET type=? WHERE registraton=?;";
             PreparedStatement statement = connection.prepareStatement(update);
 
             switch(vehicle.getType()){
@@ -255,7 +256,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
 
         // Update Brand
         if(vehicle.getType() != null){
-            String update = "UPDATE leasing.employee SET brand=? WHERE registraton=?;";
+            String update = "UPDATE leasing.vehicle SET brand=? WHERE registraton=?;";
             PreparedStatement statement = connection.prepareStatement(update);
 
             statement.setString(1, vehicle.getBrand());
@@ -266,7 +267,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
 
         // Update Model
         if(vehicle.getType() != null){
-            String update = "UPDATE leasing.employee SET model=? WHERE registraton=?;";
+            String update = "UPDATE leasing.vehicle SET model=? WHERE registraton=?;";
             PreparedStatement statement = connection.prepareStatement(update);
 
             statement.setString(1, vehicle.getModel());
@@ -277,7 +278,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
 
         // Update MotorType
         if(vehicle.getType() != null){
-            String update = "UPDATE leasing.employee SET motorType=? WHERE registraton=?;";
+            String update = "UPDATE leasing.vehicle SET motorType=? WHERE registraton=?;";
             PreparedStatement statement = connection.prepareStatement(update);
 
             switch (vehicle.getMotorType()){
@@ -300,7 +301,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
 
         // Update Gear Box
         if(vehicle.getType() != null){
-            String update = "UPDATE leasing.employee SET gearBox=? WHERE registraton=?;";
+            String update = "UPDATE leasing.vehicle SET gearBox=? WHERE registraton=?;";
             PreparedStatement statement = connection.prepareStatement(update);
 
             switch (vehicle.getGearBox()){
@@ -320,7 +321,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
 
         // Update Description
         if(vehicle.getType() != null){
-            String update = "UPDATE leasing.employee SET description=? WHERE registraton=?;";
+            String update = "UPDATE leasing.vehicle SET description=? WHERE registraton=?;";
             PreparedStatement statement = connection.prepareStatement(update);
 
             statement.setString(1, vehicle.getDescription());
@@ -416,7 +417,7 @@ public class MySQLVehicleDAO implements IVehicleDAO{
     @Override
     public void removeVehicleByRegistration(String registration) throws Exception {
         Connection connection = initConnection();
-        String delete = "DELETE FROM leasing.employee WHERE registration=?;";
+        String delete = "DELETE FROM leasing.vehicle WHERE registration=?;";
         PreparedStatement statement = connection.prepareStatement(delete);
 
         statement.setString(1, registration);

@@ -5,12 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +41,7 @@ public class Employee {
 
     public static Employee defaultEmployee() {
         Employee employee = new Employee();
-        employee.memberId = -1;
+        employee.memberId = -1111;
         employee.name = "Ambroise";
         employee.surname = "FAUGIER";
         employee.socialSecurityId = "000000000000011";

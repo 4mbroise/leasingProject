@@ -15,6 +15,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Singleton
 @Path("/vehicle")
 public class VehicleRessource {
@@ -24,7 +26,6 @@ public class VehicleRessource {
     IVehicleDAO vehicleDAO;
 
     public VehicleRessource() {
-        System.out.println("Elliot");
         try {
             this.vehicleDAO = new MySQLVehicleDAO();
         } catch (ClassNotFoundException e) {
@@ -34,6 +35,8 @@ public class VehicleRessource {
         }
     }
 
+
+    //--------------------------------------------------------------------------GET ALL
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public String carXML() {
@@ -43,6 +46,8 @@ public class VehicleRessource {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
     }
+
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,6 +59,8 @@ public class VehicleRessource {
         }
     }
 
+
+    //--------------------------------------------------------------------------FIND BY ID
     @GET
     @Produces(MediaType.APPLICATION_XML)
     @Path("/{registration}")
@@ -65,8 +72,10 @@ public class VehicleRessource {
         }
     }
 
+
+
     @GET
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{registration}")
     public String vehicleJSON(@PathParam("registration") String registration) {
         try {
@@ -75,6 +84,8 @@ public class VehicleRessource {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
         }
     }
+
+
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
@@ -88,6 +99,7 @@ public class VehicleRessource {
         }
     }
 
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public String createEmployeeJSON(String jsonAsVehicle) {
@@ -99,6 +111,8 @@ public class VehicleRessource {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
         }
     }
+
+
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
@@ -142,43 +156,4 @@ public class VehicleRessource {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-    @POST
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
-    public String createCarXML(String vehicleAsXMLString) {
-        try{
-            String xml = Vehicle.fromXML(vehicleAsXMLString).toXML();
-            return xml;
-        } catch (DocumentException e){
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String createCarJSON(String vehicleAsJSONString) {
-        try{
-            String xml = Vehicle.fromJSON(vehicleAsJSONString).toJSON();
-            return xml;
-        } catch (DocumentException e){
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

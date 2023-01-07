@@ -25,12 +25,12 @@ create table if not exists vehicle
 
 create table if not exists rent
 (
-    rentId        int          not null,
+    rentId        int auto_increment,
     renter        int          not null,
     rentedVehicle varchar(100) not null,
     rentDate      DATE         not null,
     hourStartRent TIME         not null,
-    hoursEndRent  TIME         not null,
+    hourEndRent  TIME         not null,
     constraint rent_pk
     primary key (rentId),
     constraint rentedVehicle
